@@ -14,6 +14,11 @@
 import MultipeerConnectivity
 import os
 
+
+enum NamedColor: String, CaseIterable {
+    case red, green, yellow
+}
+
 class ColorMultipeerSession: NSObject, ObservableObject {
     // 전송하고자하는 정보?
     private let serviceType = "example-color"
@@ -32,7 +37,25 @@ class ColorMultipeerSession: NSObject, ObservableObject {
     // Save Connected Peers
     @Published var connectedPeers: [MCPeerID] = []
     
+    // Save Color Setting
+    @Published var currentColor: NamedColor? = nil
     // 클래스 Initializer
+    
+    // Color Send
+    func send(color: NamedColor) {
+        log.info("sendColor: \(String(describing: color)) to \(self.session.connectedPeers.count) peers")
+        self.currentColor = color
+        
+        // Is there any Connected Peers more than 1
+        if (!session.connectedPeers.isEmpty) {
+            do {
+                try session.send(color.rawValue.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
+            } catch {
+                log.error("Error for sending: \(String(describing: error))")
+            }
+        }
+    }
+    
     override init() {
         session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .none)
         serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: serviceType)
@@ -112,8 +135,18 @@ extension ColorMultipeerSession: MCSessionDelegate {
     
     // Inform Peer's transfer Data bytes
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        log.info("didReceive bytes \(data.count) bytes")
+        if let string = String(data: data, encoding: .utf8), let color = NamedColor(rawValue: string) {
+            log.info("didReceive color \(string)")
+            DispatchQueue.main.async {
+                self.currentColor = color
+            }
+        } else {
+            log.info("didReceive invalid value \(data.count) bytes")
+        }
     }
+//    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+//        log.info("didReceive bytes \(data.count) bytes")
+//    }
     
     // Can't Receive Specific Item 1
     public func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
