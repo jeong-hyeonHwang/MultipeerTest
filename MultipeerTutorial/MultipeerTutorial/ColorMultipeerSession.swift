@@ -29,6 +29,9 @@ class ColorMultipeerSession: NSObject, ObservableObject {
     // 로그 출력
     private let log = Logger()
     
+    // Save Connected Peers
+    @Published var connectedPeers: [MCPeerID] = []
+    
     // 클래스 Initializer
     override init() {
         session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .none)
@@ -66,6 +69,10 @@ extension ColorMultipeerSession: MCNearbyServiceAdvertiserDelegate {
     // Receive Invitation == true
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         log.info("didReceiveInvitationFromPeer \(peerID)")
+        
+        // MARK: Accept Invitation
+        // !CAUTION! Automatically
+        invitationHandler(true, session)
     }
 }
 
@@ -78,6 +85,10 @@ extension ColorMultipeerSession: MCNearbyServiceBrowserDelegate {
     // Found Peer
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String: String]?) {
         log.info("ServiceBrowser found peer: \(peerID)")
+        
+        //MARK: Invite Peer who We Found
+        // !CAUTION! Automatically
+        browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
     }
     
     // Lost Peer
@@ -91,6 +102,12 @@ extension ColorMultipeerSession: MCSessionDelegate {
     // Inform Peer Status Change
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         log.info("peer \(peerID) didChangeState: \(state.rawValue)")
+        
+        // Update Peer's Status
+        // !CAUTION! Automatically
+        DispatchQueue.main.async {
+            self.connectedPeers = session.connectedPeers
+        }
     }
     
     // Inform Peer's transfer Data bytes
