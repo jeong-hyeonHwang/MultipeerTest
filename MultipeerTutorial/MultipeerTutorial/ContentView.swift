@@ -13,15 +13,16 @@ let height = UIScreen.main.bounds.height
 struct ContentView: View {
 
     @StateObject var colorSession = ColorMultipeerSession()
-    
+    @State var pressedColor: String? = nil
     var body: some View {
         VStack(alignment: .center) {
             
             VStack {
+                Text(pressedColor ?? "NOT PRESSED")
+                    .frame(width: width, height: height * 0.3, alignment: .center)
                 Text("Connected Devices:")
                     .frame(width: width, height: height * 0.1, alignment: .center)
                 Text(String(describing: colorSession.connectedPeers.map(\.displayName)))
-//                    .frame(width: width, height: height * 0.7, alignment: .center)
                 
             }.frame(width: width, height: height * 0.8, alignment: .center)
             Divider()
@@ -29,6 +30,7 @@ struct ContentView: View {
                 ForEach(NamedColor.allCases, id: \.self) { color in
                     Button(color.rawValue) {
                         colorSession.send(color: color)
+                        pressedColor = "\(color)"
                     }
                     .padding()
                 }

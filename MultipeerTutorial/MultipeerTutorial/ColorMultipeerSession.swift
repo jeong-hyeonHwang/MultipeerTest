@@ -44,7 +44,7 @@ class ColorMultipeerSession: NSObject, ObservableObject {
     // Color Send
     func send(color: NamedColor) {
         log.info("sendColor: \(String(describing: color)) to \(self.session.connectedPeers.count) peers")
-        self.currentColor = color
+        //self.currentColor = color
         
         // Is there any Connected Peers more than 1
         if (!session.connectedPeers.isEmpty) {
