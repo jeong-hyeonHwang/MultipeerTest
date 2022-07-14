@@ -9,6 +9,8 @@ import MultipeerConnectivity
 import os
 import SwiftUI
 
+//https://developer.apple.com/documentation/multipeerconnectivity
+//https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
 class SessionListener: NSObject, ObservableObject {
     // 전송하고자하는 정보?
     
@@ -27,13 +29,10 @@ class SessionListener: NSObject, ObservableObject {
     // Save Connected Peers
     @Published var connectedPeers: [MCPeerID] = []
     
-    // 클래스 Initializer
-    
-    // Color Send
+    // Emoji Send
     func send(emoji: NamedEmoji) {
         log.info("sendEmoji: \(String(describing: emoji)) to \(self.session.connectedPeers.count) peers")
-        //self.currentColor = color
-        
+
         // Is there any Connected Peers more than 1
         if (!session.connectedPeers.isEmpty) {
             do {

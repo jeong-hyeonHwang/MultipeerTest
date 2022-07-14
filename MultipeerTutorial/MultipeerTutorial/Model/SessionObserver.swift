@@ -15,6 +15,8 @@ import MultipeerConnectivity
 import os
 import SwiftUI
 
+//https://developer.apple.com/documentation/multipeerconnectivity
+//https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
 class SessionObserver: NSObject, ObservableObject {
     // 전송하고자하는 정보?
     private let serviceType = "example-color"
