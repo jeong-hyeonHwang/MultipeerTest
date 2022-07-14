@@ -10,12 +10,12 @@ import SwiftUI
 import MultipeerConnectivity
 
 struct ListView: View {
+    @StateObject var sessionObserver = SessionObserver()
     
-    @StateObject var  listMakeListener = EmojiMultipeerSession()
     var body: some View {
         VStack{
             HStack{
-                List(listMakeListener.connectRequestedPeers, id: \.self) { peerID in
+                List(sessionObserver.connectRequestedPeers, id: \.self) { peerID in
                     NavigationLink(destination: ListenerView(connectedPeerID: peerID)) {
                         HStack {
                             Text(peerID.displayName)
@@ -26,11 +26,10 @@ struct ListView: View {
             }
         }
         .onAppear() {
-            listMakeListener.startBrowsing()
-            print(listMakeListener.connectedPeers)
+            sessionObserver.startBrowsing()
         }
         .onDisappear() {
-            listMakeListener.sessionDisconnect()
+            sessionObserver.sessionDisconnect()
         }
     }
 }

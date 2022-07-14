@@ -20,7 +20,8 @@ struct ListenerView: View {
         VStack(alignment: .center) {
             VStack {
                 Text("PressedEmoji Is \(emojiIs(s:pressedEmoji ?? "NIL"))")
-            }.frame(width: width, height: height * 0.8, alignment: .center)
+            }
+            .frame(width: width, height: height * 0.8, alignment: .center)
             Divider()
             HStack {
                 ForEach(NamedEmoji.allCases, id: \.self) { emoji in

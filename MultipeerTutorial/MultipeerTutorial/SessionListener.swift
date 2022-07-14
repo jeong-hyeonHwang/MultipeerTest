@@ -52,15 +52,10 @@ class SessionListener: NSObject, ObservableObject {
         
         session.delegate = self
         serviceAdvertiser.delegate = self
-        
-//        // Peer Advertising Start
-//        serviceAdvertiser.startAdvertisingPeer()
-        // Peer Browsing Start
-        //serviceBrowser.startBrowsingForPeers()
     }
     
     deinit {
-//        // Peer Advertising Stop
+        // Peer Advertising Stop
         serviceAdvertiser.stopAdvertisingPeer()
         
     }
@@ -90,13 +85,11 @@ extension SessionListener: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         log.info("didReceiveInvitationFromPeer \(peerID)")
         
+        // MARK: Accept Invitation
         if(peerID.displayName == temp?.displayName)
         {
             invitationHandler(true, session)
         }
-        // MARK: Accept Invitation
-        // !CAUTION! Automatically
-        //invitationHandler(true, session)
     }
     
     func advertiser(didReceiveInvitationFromPeer peerID: [MCPeerID]) -> [String]{
@@ -129,9 +122,6 @@ extension SessionListener: MCSessionDelegate {
             log.info("didReceive invalid value \(data.count) bytes")
         }
     }
-//    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-//        log.info("didReceive bytes \(data.count) bytes")
-//    }
     
     // Can't Receive Specific Item 1
     public func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

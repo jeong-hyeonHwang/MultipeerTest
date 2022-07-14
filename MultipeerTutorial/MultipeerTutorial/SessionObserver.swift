@@ -15,7 +15,7 @@ import MultipeerConnectivity
 import os
 import SwiftUI
 
-class EmojiMultipeerSession: NSObject, ObservableObject {
+class SessionObserver: NSObject, ObservableObject {
     // 전송하고자하는 정보?
     private let serviceType = "example-color"
     // 나의 기기 이름
@@ -101,7 +101,7 @@ class EmojiMultipeerSession: NSObject, ObservableObject {
 }
 
 // Error Notice Delegate
-extension EmojiMultipeerSession: MCNearbyServiceAdvertiserDelegate {
+extension SessionObserver: MCNearbyServiceAdvertiserDelegate {
     // Advertise Not Begin
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
         log.error("ServiceAdvertiser didNotStartAdvertisingPeer: \(String(describing: error))")
@@ -119,7 +119,7 @@ extension EmojiMultipeerSession: MCNearbyServiceAdvertiserDelegate {
     }
 }
 
-extension EmojiMultipeerSession: MCNearbyServiceBrowserDelegate {
+extension SessionObserver: MCNearbyServiceBrowserDelegate {
     // Browsing Not Begin
     func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
         log.error("ServiceBrowser didNotStartBrowsingForPeers: \(String(describing: error))")
@@ -140,7 +140,7 @@ extension EmojiMultipeerSession: MCNearbyServiceBrowserDelegate {
     }
 }
 
-extension EmojiMultipeerSession: MCSessionDelegate {
+extension SessionObserver: MCSessionDelegate {
     
     // Inform Peer Status Change
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
@@ -164,9 +164,6 @@ extension EmojiMultipeerSession: MCSessionDelegate {
             log.info("didReceive invalid value \(data.count) bytes")
         }
     }
-//    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-//        log.info("didReceive bytes \(data.count) bytes")
-//    }
     
     // Can't Receive Specific Item 1
     public func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

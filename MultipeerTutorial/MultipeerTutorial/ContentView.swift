@@ -10,18 +10,17 @@ import CoreData
 
 
 struct ContentView: View {
+    var body: some View {
         
-        var body: some View {
-            
-            NavigationView {
-                VStack {
-                    NavigationLink(destination: PresentorView()) {
-                        Text("Session Opener")
-                    }
-                    NavigationLink(destination: ListView()) {
-                        Text("Session Listener")
-                    }
+        NavigationView {
+            VStack {
+                NavigationLink(destination: PresentorView()) {
+                    Text("Session Opener")
+                }
+                NavigationLink(destination: ListView()) {
+                    Text("Session Listener")
                 }
             }
         }
+    }
 }
