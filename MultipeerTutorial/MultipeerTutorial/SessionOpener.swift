@@ -27,7 +27,7 @@ class SessionOpener: NSObject, ObservableObject {
     // Save Connected Peers
     @Published var connectedPeers: [MCPeerID] = []
     
-    // Save Color Setting
+    // Save Emoji Setting
     @Published var currentEmoji: NamedEmoji? = nil
     // 클래스 Initializer
     
@@ -54,11 +54,6 @@ class SessionOpener: NSObject, ObservableObject {
         
         session.delegate = self
         serviceBrowser.delegate = self
-        
-//        // Peer Advertising Start
-//        serviceAdvertiser.startAdvertisingPeer()
-        // Peer Browsing Start
-        //serviceBrowser.startBrowsingForPeers()
     }
     
     deinit {

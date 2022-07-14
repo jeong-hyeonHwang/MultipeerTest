@@ -25,9 +25,6 @@ struct ListView: View {
                 }
             }
         }
-        .onAppear() {
-            sessionObserver.startBrowsing()
-        }
         .onDisappear() {
             sessionObserver.sessionDisconnect()
         }

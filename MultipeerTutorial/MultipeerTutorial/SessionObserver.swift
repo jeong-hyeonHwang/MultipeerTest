@@ -22,58 +22,30 @@ class SessionObserver: NSObject, ObservableObject {
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
     // 서비스 발신
     private let serviceAdvertiser: MCNearbyServiceAdvertiser
-    // 서비스 탐색
-    private let serviceBrowser: MCNearbyServiceBrowser
     // 연결된 모든 디바이스 탐색을 위한 세션
     private let session: MCSession
     
     // 로그 출력
     private let log = Logger()
     
-    // Save Connected Peers
-    @Published var connectedPeers: [MCPeerID] = []
-    // Save Color Setting
-    @Published var currentEmoji: NamedEmoji? = nil
-    
     @Published var connectRequestedPeers: [MCPeerID] = []
-    
-    // Color Send
-    func send(emoji: NamedEmoji) {
-        log.info("sendEmoji: \(String(describing: emoji)) to \(self.session.connectedPeers.count) peers")
-        //self.currentColor = color
-        
-        // Is there any Connected Peers more than 1
-        if (!session.connectedPeers.isEmpty) {
-            do {
-                try session.send(emoji.rawValue.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
-            } catch {
-                log.error("Error for sending: \(String(describing: error))")
-            }
-        }
-    }
     
     override init() {
         session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .none)
         serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: serviceType)
-        serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: serviceType)
         
         super.init()
         
         session.delegate = self
         serviceAdvertiser.delegate = self
-        serviceBrowser.delegate = self
         
         // Peer Advertising Start
         serviceAdvertiser.startAdvertisingPeer()
-        // Peer Browsing Start
-        serviceBrowser.startBrowsingForPeers()
     }
     
     deinit {
         // Peer Advertising Stop
         serviceAdvertiser.stopAdvertisingPeer()
-        // Peer Browsing Stop
-        serviceBrowser.stopBrowsingForPeers()
         sessionDisconnect()
     }
     
@@ -82,17 +54,8 @@ class SessionObserver: NSObject, ObservableObject {
         serviceAdvertiser.startAdvertisingPeer()
     }
     
-    func startBrowsing() {
-        // Peer Browsing Start
-        serviceBrowser.startBrowsingForPeers()
-    }
-    
     func stopAdvertise() {
         serviceAdvertiser.stopAdvertisingPeer()
-    }
-    
-    func stopBrowsing() {
-        serviceBrowser.stopBrowsingForPeers()
     }
     
     func sessionDisconnect() {
@@ -113,30 +76,6 @@ extension SessionObserver: MCNearbyServiceAdvertiserDelegate {
         if(peerID.displayName != self.myPeerId.displayName) {
             connectRequestedPeers.append(peerID)
         }
-        // MARK: Accept Invitation
-        // !CAUTION! Automatically
-        //invitationHandler(true, session)
-    }
-}
-
-extension SessionObserver: MCNearbyServiceBrowserDelegate {
-    // Browsing Not Begin
-    func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
-        log.error("ServiceBrowser didNotStartBrowsingForPeers: \(String(describing: error))")
-    }
-    
-    // Found Peer
-    func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String: String]?) {
-        log.info("ServiceBrowser found peer: \(peerID)")
-        log.info("\(Date())")
-        //MARK: Invite Peer who We Found
-        // !CAUTION! Automatically
-        browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
-    }
-    
-    // Lost Peer
-    func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        log.info("ServiceBrowser lost peer: \(peerID)")
     }
 }
 
@@ -145,21 +84,12 @@ extension SessionObserver: MCSessionDelegate {
     // Inform Peer Status Change
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         log.info("peer \(peerID) didChangeState: \(state.rawValue)")
-        
-        // Update Peer's Status
-        // !CAUTION! Automatically
-        DispatchQueue.main.async {
-            self.connectedPeers = session.connectedPeers
-        }
     }
     
     // Inform Peer's transfer Data bytes
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        if let string = String(data: data, encoding: .utf8), let emoji = NamedEmoji(rawValue: string) {
+        if let string = String(data: data, encoding: .utf8) {
             log.info("didReceive color \(string)")
-            DispatchQueue.main.async {
-                self.currentEmoji = emoji
-            }
         } else {
             log.info("didReceive invalid value \(data.count) bytes")
         }

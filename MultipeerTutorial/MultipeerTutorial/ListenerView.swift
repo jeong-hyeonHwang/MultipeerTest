@@ -19,18 +19,20 @@ struct ListenerView: View {
     var body: some View {
         VStack(alignment: .center) {
             VStack {
-                Text("PressedEmoji Is \(emojiIs(s:pressedEmoji ?? "NIL"))")
+                Text("PressedEmoji")
+                    .padding(15)
+                Text("\(emojiIs(s:pressedEmoji ?? "NIL"))")
+                    .font(.system(size: 60))
             }
-            .frame(width: width, height: height * 0.8, alignment: .center)
-            Divider()
-            HStack {
+            .frame(width: width, height: height * 0.4, alignment: .center)
+            VStack(spacing: 25){
                 ForEach(NamedEmoji.allCases, id: \.self) { emoji in
                     Button(emoji.rawValue) {
                         listenerSession.send(emoji: emoji)
                         pressedEmoji = "\(emoji)"
                     }
                 }
-            }
+            }.frame(width: width, height: height * 0.6, alignment: .center)
         }
         .padding()
         .onAppear() {
