@@ -28,33 +28,17 @@ struct PresentorView: View {
                             presentorSession.sessionDisconnect()
                         }
                     }
-//                Text("PressedEmoji Is \(emojiIs(s:pressedEmoji ?? "NIL"))")
                 Text("SENT EMOJI IS \(emojiIs(s: presentorSession.currentEmoji?.rawValue ?? "NIL"))")
                     .frame(width: width, height: height * 0.15, alignment: .center)
                     .font(.system(size: 30))
                 Text("Connected Devices:")
                     .frame(width: width, height: height * 0.1, alignment: .center)
-                Text(String(describing: presentorSession.connectedPeers.map(\.displayName)))
-                
+                List(presentorSession.connectedPeers, id: \.self) { peer in
+                    Text(peer.displayName)
+                }
             }.frame(width: width, height: height * 0.8, alignment: .center)
-            Divider()
-//            HStack {
-//                ForEach(NamedEmoji.allCases, id: \.self) { emoji in
-//                    Button(emoji.rawValue) {
-//                        presentorSession.send(emoji: emoji)
-//                        pressedEmoji = "\(emoji)"
-////                        if(adToggleOn == true) {
-////                            emojiSession.send(emoji: emoji)
-////                            pressedEmoji = "\(emoji)"
-////                        }
-//                    }
-//                }
-//            }
         }
         .padding()
-        .onAppear() {
-            print("\(Date())")
-        }
         .onDisappear() {
             presentorSession.stopBrowsing()
             presentorSession.sessionDisconnect()
