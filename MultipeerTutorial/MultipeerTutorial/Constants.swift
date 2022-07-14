@@ -11,8 +11,6 @@ import SwiftUI
 let width = UIScreen.main.bounds.width
 let height = UIScreen.main.bounds.height
 
-var connectDeviceName: String = ""
-
 enum NamedEmoji: String, CaseIterable {
     case Marvelous, Surprising, Congrats, LEGO, Idk, Good
 }
