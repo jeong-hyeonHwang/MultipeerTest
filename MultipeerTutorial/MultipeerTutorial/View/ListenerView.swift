@@ -34,6 +34,8 @@ struct ListenerView: View {
                 }
             }.frame(width: width, height: height * 0.6, alignment: .center)
         }
+        .navigationTitle("\(connectedPeerID.displayName)")
+        .navigationBarTitleDisplayMode(.inline)
         .padding()
         .onAppear() {
             listenerSession.temp = connectedPeerID

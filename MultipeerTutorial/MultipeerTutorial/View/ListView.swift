@@ -25,6 +25,8 @@ struct ListView: View {
                 }
             }
         }
+        .navigationTitle("Device List")
+        .navigationBarTitleDisplayMode(.inline)
         .onDisappear() {
             sessionObserver.sessionDisconnect()
         }

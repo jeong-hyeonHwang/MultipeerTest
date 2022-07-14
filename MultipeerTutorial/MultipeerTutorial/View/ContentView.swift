@@ -14,11 +14,13 @@ struct ContentView: View {
         
         NavigationView {
             VStack {
-                NavigationLink(destination: PresentorView()) {
-                    Text("Session Opener")
+                NavigationLink(destination: PresenterView()) {
+                    Text("Session Presenter")
+                        .font(.system(.title2))
                 }.frame(width: width, height: height * 0.5, alignment: .center)
                 NavigationLink(destination: ListView()) {
                     Text("Session Listener")
+                        .font(.system(.title2))
                 }.frame(width: width, height: height * 0.5, alignment: .center)
             }
         }
