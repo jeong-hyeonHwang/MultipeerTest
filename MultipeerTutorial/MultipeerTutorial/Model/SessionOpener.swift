@@ -121,9 +121,6 @@ extension SessionOpener: MCSessionDelegate {
             log.info("didReceive invalid value \(data.count) bytes")
         }
     }
-//    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-//        log.info("didReceive bytes \(data.count) bytes")
-//    }
     
     // Can't Receive Specific Item 1
     public func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

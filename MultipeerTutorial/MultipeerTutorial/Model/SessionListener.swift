@@ -90,14 +90,6 @@ extension SessionListener: MCNearbyServiceAdvertiserDelegate {
             invitationHandler(true, session)
         }
     }
-    
-    func advertiser(didReceiveInvitationFromPeer peerID: [MCPeerID]) -> [String]{
-        var arr: [String] = []
-        for i in 0..<peerID.count {
-            arr.append(peerID[i].displayName)
-        }
-        return arr
-    }
 }
 
 extension SessionListener: MCSessionDelegate {
