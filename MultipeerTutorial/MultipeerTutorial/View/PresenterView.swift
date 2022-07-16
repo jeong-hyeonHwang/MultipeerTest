@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct PresenterView: View {
-    //@StateObject var presenterSession = SessionOpener()
     @ObservedObject var presenterSession: SessionOpener
     @State var pressedEmoji: String? = nil
     
@@ -48,13 +47,8 @@ struct PresenterView: View {
             .listStyle(.plain)
         }
         .padding()
-//        .onAppear()
-//        {
-//            presenterSession.startBrowsing()
-//        }
         .onDisappear() {
             presenterSession.stopBrowsing()
-            //presenterSession.sessionDisconnect()
         }
     }
 }
