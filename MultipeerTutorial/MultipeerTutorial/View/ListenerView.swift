@@ -11,7 +11,7 @@ import MultipeerConnectivity
 
 struct ListenerView: View {
     @State var connectedPeerID: MCPeerID
-    @StateObject var  listenerSession = SessionListener()
+    @StateObject var listenerSession = SessionListener()
     
     @State var pressedEmoji: String? = nil
     @State var brToggleOn: Bool = false

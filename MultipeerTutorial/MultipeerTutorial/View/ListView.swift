@@ -29,6 +29,11 @@ struct ListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear() {
             sessionObserver.sessionDisconnect()
+            sessionObserver.stopAdvertise()
+            sessionObserver.connectRequestedPeers.removeAll()
+        }
+        .onAppear() {
+            sessionObserver.startAdvertise()
         }
     }
 }

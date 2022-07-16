@@ -75,7 +75,7 @@ extension SessionObserver: MCNearbyServiceAdvertiserDelegate {
     // Receive Invitation == true
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         log.info("didReceiveInvitationFromPeer \(peerID)")
-        if(peerID.displayName != self.myPeerId.displayName) {
+        if(peerID.displayName != self.myPeerId.displayName && !connectRequestedPeers.contains(peerID)) {
             connectRequestedPeers.append(peerID)
         }
     }
