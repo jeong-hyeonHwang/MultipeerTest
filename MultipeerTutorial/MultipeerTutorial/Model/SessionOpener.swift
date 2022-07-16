@@ -31,22 +31,6 @@ class SessionOpener: NSObject, ObservableObject {
     
     // Save Emoji Setting
     @Published var currentEmoji: NamedEmoji? = nil
-    // 클래스 Initializer
-    
-    // Color Send
-    func send(emoji: NamedEmoji) {
-        log.info("sendEmoji: \(String(describing: emoji)) to \(self.session.connectedPeers.count) peers")
-        //self.currentColor = color
-        
-        // Is there any Connected Peers more than 1
-        if (!session.connectedPeers.isEmpty) {
-            do {
-                try session.send(emoji.rawValue.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
-            } catch {
-                log.error("Error for sending: \(String(describing: error))")
-            }
-        }
-    }
     
     override init() {
         session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .none)
