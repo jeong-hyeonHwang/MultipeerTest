@@ -17,9 +17,11 @@ import SwiftUI
 
 //https://developer.apple.com/documentation/multipeerconnectivity
 //https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
+
+// 현재 열린 Session이 있는지를 관찰하기 위한 클래스
 class SessionObserver: NSObject, ObservableObject {
     // 전송하고자하는 정보?
-    private let serviceType = "example-color"
+    private let serviceType = "example-emoji"
     // 나의 기기 이름
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
     // 서비스 발신
@@ -73,9 +75,10 @@ extension SessionObserver: MCNearbyServiceAdvertiserDelegate {
     }
     
     // Receive Invitation == true
+    // invitation을 보낸 Peer를 connectRequestedPeers에 추가
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         log.info("didReceiveInvitationFromPeer \(peerID)")
-        if(peerID.displayName != self.myPeerId.displayName) {
+        if(peerID.displayName != self.myPeerId.displayName && !connectRequestedPeers.contains(peerID)) {
             connectRequestedPeers.append(peerID)
         }
     }
@@ -91,7 +94,7 @@ extension SessionObserver: MCSessionDelegate {
     // Inform Peer's transfer Data bytes
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         if let string = String(data: data, encoding: .utf8) {
-            log.info("didReceive color \(string)")
+            log.info("didReceive Emoji \(string)")
         } else {
             log.info("didReceive invalid value \(data.count) bytes")
         }

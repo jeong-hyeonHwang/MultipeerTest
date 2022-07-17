@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PresenterView: View {
-    @StateObject var presenterSession = SessionOpener()
+    @ObservedObject var presenter: SessionPresenter
     @State var pressedEmoji: String? = nil
     
     @State var brToggleOn: Bool = false
@@ -22,16 +22,16 @@ struct PresenterView: View {
                     .onChange(of: brToggleOn) { status in
                         if(status == true) {
                             print("BROWSING START!")
-                            presenterSession.startBrowsing()
+                            presenter.startBrowsing()
                         } else {
                             print("BROWSING STOP!")
-                            presenterSession.stopBrowsing()
-                            presenterSession.sessionDisconnect()
+                            presenter.stopBrowsing()
+                            presenter.sessionDisconnect()
                         }
                     }
-                Text("SentEmoji")
+                Text("RECEIVED Emoji")
                     .padding(10)
-                Text("\(emojiIs(s: presenterSession.currentEmoji?.rawValue ?? "NIL"))")
+                Text("\(emojiIs(s: presenter.currentEmoji?.rawValue ?? "NIL"))")
                     .font(.system(size: 60))
                     .padding(10)
             }
@@ -41,15 +41,14 @@ struct PresenterView: View {
             
             Text("Connected Devices:")
             
-            List(presenterSession.connectedPeers, id: \.self) { peer in
+            List(presenter.connectedPeers, id: \.self) { peer in
                 Text(peer.displayName)
             }
             .listStyle(.plain)
         }
         .padding()
         .onDisappear() {
-            presenterSession.stopBrowsing()
-            presenterSession.sessionDisconnect()
+            presenter.stopBrowsing()
         }
     }
 }

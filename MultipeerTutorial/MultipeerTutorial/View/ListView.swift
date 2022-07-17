@@ -16,7 +16,7 @@ struct ListView: View {
         VStack{
             HStack{
                 List(sessionObserver.connectRequestedPeers, id: \.self) { peerID in
-                    NavigationLink(destination: ListenerView(connectedPeerID: peerID)) {
+                    NavigationLink(destination: AudienceView(connectedPeerID: peerID)) {
                         HStack {
                             Text(peerID.displayName)
                             Spacer()
@@ -29,6 +29,11 @@ struct ListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear() {
             sessionObserver.sessionDisconnect()
+            sessionObserver.stopAdvertise()
+            sessionObserver.connectRequestedPeers.removeAll()
+        }
+        .onAppear() {
+            sessionObserver.startAdvertise()
         }
     }
 }

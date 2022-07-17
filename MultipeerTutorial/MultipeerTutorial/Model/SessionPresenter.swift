@@ -1,9 +1,11 @@
 //
-//  SessionListener.swift
+//  SessionOpener.swift
 //  MultipeerTutorial
 //
 //  Created by 황정현 on 2022/07/14.
 //
+
+import Foundation
 
 import MultipeerConnectivity
 import os
@@ -11,15 +13,14 @@ import SwiftUI
 
 //https://developer.apple.com/documentation/multipeerconnectivity
 //https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
-class SessionListener: NSObject, ObservableObject {
+// 발표자 클래스
+class SessionPresenter: NSObject, ObservableObject {
     // 전송하고자하는 정보?
-    
-    var temp: MCPeerID?
-    private let serviceType = "example-color"
+    private let serviceType = "example-emoji"
     // 나의 기기 이름
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
-    // 서비스 발신
-    private let serviceAdvertiser: MCNearbyServiceAdvertiser
+    // 서비스 탐색
+    private let serviceBrowser: MCNearbyServiceBrowser
     // 연결된 모든 디바이스 탐색을 위한 세션
     private let session: MCSession
     
@@ -29,43 +30,31 @@ class SessionListener: NSObject, ObservableObject {
     // Save Connected Peers
     @Published var connectedPeers: [MCPeerID] = []
     
-    // Emoji Send
-    func send(emoji: NamedEmoji) {
-        log.info("sendEmoji: \(String(describing: emoji)) to \(self.session.connectedPeers.count) peers")
-
-        // Is there any Connected Peers more than 1
-        if (!session.connectedPeers.isEmpty) {
-            do {
-                try session.send(emoji.rawValue.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
-            } catch {
-                log.error("Error for sending: \(String(describing: error))")
-            }
-        }
-    }
+    // Save Emoji Setting
+    @Published var currentEmoji: NamedEmoji? = nil
     
     override init() {
         session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .none)
-        serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: serviceType)
+        serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: serviceType)
         
         super.init()
         
         session.delegate = self
-        serviceAdvertiser.delegate = self
+        serviceBrowser.delegate = self
     }
     
     deinit {
-        // Peer Advertising Stop
-        serviceAdvertiser.stopAdvertisingPeer()
-        
+        // Peer Browsing Stop
+        serviceBrowser.stopBrowsingForPeers()
     }
     
-    func startAdvertise() {
-        // Peer Advertising Start
-        serviceAdvertiser.startAdvertisingPeer()
+    func startBrowsing() {
+        // Peer Browsing Start
+        serviceBrowser.startBrowsingForPeers()
     }
     
-    func stopAdvertise() {
-        serviceAdvertiser.stopAdvertisingPeer()
+    func stopBrowsing() {
+        serviceBrowser.stopBrowsingForPeers()
     }
     
     func sessionDisconnect() {
@@ -73,34 +62,27 @@ class SessionListener: NSObject, ObservableObject {
     }
 }
 
-// Error Notice Delegate
-extension SessionListener: MCNearbyServiceAdvertiserDelegate {
-    // Advertise Not Begin
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
-        log.error("ServiceAdvertiser didNotStartAdvertisingPeer: \(String(describing: error))")
+extension SessionPresenter: MCNearbyServiceBrowserDelegate {
+    // Browsing Not Begin
+    func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
+        log.error("ServiceBrowser didNotStartBrowsingForPeers: \(String(describing: error))")
     }
     
-    // Receive Invitation == true
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        log.info("didReceiveInvitationFromPeer \(peerID)")
-        
-        // MARK: Accept Invitation
-        if(peerID.displayName == temp?.displayName)
-        {
-            invitationHandler(true, session)
-        }
+    // Found Peer
+    func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String: String]?) {
+        log.info("ServiceBrowser found peer: \(peerID)")
+        //MARK: Invite Peer who We Found
+        // !CAUTION! Automatically
+        browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
     }
     
-    func advertiser(didReceiveInvitationFromPeer peerID: [MCPeerID]) -> [String]{
-        var arr: [String] = []
-        for i in 0..<peerID.count {
-            arr.append(peerID[i].displayName)
-        }
-        return arr
+    // Lost Peer
+    func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
+        log.info("ServiceBrowser lost peer: \(peerID)")
     }
 }
 
-extension SessionListener: MCSessionDelegate {
+extension SessionPresenter: MCSessionDelegate {
     
     // Inform Peer Status Change
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
@@ -115,8 +97,11 @@ extension SessionListener: MCSessionDelegate {
     
     // Inform Peer's transfer Data bytes
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        if let string = String(data: data, encoding: .utf8) {
-            log.info("didReceive color \(string)")
+        if let string = String(data: data, encoding: .utf8), let emoji = NamedEmoji(rawValue: string) {
+            log.info("didReceive Emoji \(string)")
+            DispatchQueue.main.async {
+                self.currentEmoji = emoji
+            }
         } else {
             log.info("didReceive invalid value \(data.count) bytes")
         }
@@ -137,4 +122,3 @@ extension SessionListener: MCSessionDelegate {
         log.error("Receiving resources is not supported")
     }
 }
-
