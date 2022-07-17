@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 import MultipeerConnectivity
 
-struct ListenerView: View {
+struct AudienceView: View {
     @State var connectedPeerID: MCPeerID
-    @StateObject var listenerSession = SessionListener()
+    @StateObject var audience = SessionAudience()
     
     @State var pressedEmoji: String? = nil
     @State var brToggleOn: Bool = false
@@ -19,7 +19,7 @@ struct ListenerView: View {
     var body: some View {
         VStack(alignment: .center) {
             VStack {
-                Text("PressedEmoji")
+                Text("SEND Emoji")
                     .padding(15)
                 Text("\(emojiIs(s:pressedEmoji ?? "NIL"))")
                     .font(.system(size: 60))
@@ -28,7 +28,7 @@ struct ListenerView: View {
             VStack(spacing: 25){
                 ForEach(NamedEmoji.allCases, id: \.self) { emoji in
                     Button(emoji.rawValue) {
-                        listenerSession.send(emoji: emoji)
+                        audience.send(emoji: emoji)
                         pressedEmoji = "\(emoji)"
                     }
                 }
@@ -38,12 +38,12 @@ struct ListenerView: View {
         .navigationBarTitleDisplayMode(.inline)
         .padding()
         .onAppear() {
-            listenerSession.temp = connectedPeerID
-            listenerSession.startAdvertise()
+            audience.temp = connectedPeerID
+            audience.startAdvertise()
         }
         .onDisappear() {
-            listenerSession.stopAdvertise()
-            listenerSession.sessionDisconnect()
+            audience.stopAdvertise()
+            audience.sessionDisconnect()
         }
     }
 }

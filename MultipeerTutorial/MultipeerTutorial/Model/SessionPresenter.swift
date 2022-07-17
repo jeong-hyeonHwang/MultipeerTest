@@ -13,9 +13,10 @@ import SwiftUI
 
 //https://developer.apple.com/documentation/multipeerconnectivity
 //https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
-class SessionOpener: NSObject, ObservableObject {
+// 발표자 클래스
+class SessionPresenter: NSObject, ObservableObject {
     // 전송하고자하는 정보?
-    private let serviceType = "example-color"
+    private let serviceType = "example-emoji"
     // 나의 기기 이름
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
     // 서비스 탐색
@@ -61,7 +62,7 @@ class SessionOpener: NSObject, ObservableObject {
     }
 }
 
-extension SessionOpener: MCNearbyServiceBrowserDelegate {
+extension SessionPresenter: MCNearbyServiceBrowserDelegate {
     // Browsing Not Begin
     func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
         log.error("ServiceBrowser didNotStartBrowsingForPeers: \(String(describing: error))")
@@ -81,7 +82,7 @@ extension SessionOpener: MCNearbyServiceBrowserDelegate {
     }
 }
 
-extension SessionOpener: MCSessionDelegate {
+extension SessionPresenter: MCSessionDelegate {
     
     // Inform Peer Status Change
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
@@ -97,7 +98,7 @@ extension SessionOpener: MCSessionDelegate {
     // Inform Peer's transfer Data bytes
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         if let string = String(data: data, encoding: .utf8), let emoji = NamedEmoji(rawValue: string) {
-            log.info("didReceive color \(string)")
+            log.info("didReceive Emoji \(string)")
             DispatchQueue.main.async {
                 self.currentEmoji = emoji
             }

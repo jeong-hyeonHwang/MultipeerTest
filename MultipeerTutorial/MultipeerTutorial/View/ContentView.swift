@@ -11,13 +11,13 @@ import CoreData
 
 struct ContentView: View {
     
-    @StateObject var presenterSession = SessionOpener()
+    @StateObject var presenter = SessionPresenter()
     
     var body: some View {
         
         NavigationView {
             VStack {
-                NavigationLink(destination: PresenterView(presenterSession: presenterSession)) {
+                NavigationLink(destination: PresenterView(presenter: presenter)) {
                     Text("Session Presenter")
                         .font(.system(.title2))
                 }.frame(width: width, height: height * 0.5, alignment: .center)

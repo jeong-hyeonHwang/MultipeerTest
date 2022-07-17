@@ -11,11 +11,12 @@ import SwiftUI
 
 //https://developer.apple.com/documentation/multipeerconnectivity
 //https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
-class SessionListener: NSObject, ObservableObject {
+// 청중 클래스
+class SessionAudience: NSObject, ObservableObject {
     // 전송하고자하는 정보?
     
     var temp: MCPeerID?
-    private let serviceType = "example-color"
+    private let serviceType = "example-emoji"
     // 나의 기기 이름
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
     // 서비스 발신
@@ -74,7 +75,7 @@ class SessionListener: NSObject, ObservableObject {
 }
 
 // Error Notice Delegate
-extension SessionListener: MCNearbyServiceAdvertiserDelegate {
+extension SessionAudience: MCNearbyServiceAdvertiserDelegate {
     // Advertise Not Begin
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
         log.error("ServiceAdvertiser didNotStartAdvertisingPeer: \(String(describing: error))")
@@ -92,7 +93,7 @@ extension SessionListener: MCNearbyServiceAdvertiserDelegate {
     }
 }
 
-extension SessionListener: MCSessionDelegate {
+extension SessionAudience: MCSessionDelegate {
     
     // Inform Peer Status Change
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
@@ -108,7 +109,7 @@ extension SessionListener: MCSessionDelegate {
     // Inform Peer's transfer Data bytes
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         if let string = String(data: data, encoding: .utf8) {
-            log.info("didReceive color \(string)")
+            log.info("didReceive emoji \(string)")
         } else {
             log.info("didReceive invalid value \(data.count) bytes")
         }
