@@ -53,7 +53,9 @@ struct PresenterView: View {
         }
         .padding()
         .onDisappear() {
+            presenter.stopAdvertise()
             presenter.stopBrowsing()
+            presenter.sessionDisconnect()
         }
     }
 }
