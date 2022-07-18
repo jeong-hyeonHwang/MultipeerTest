@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import MultipeerConnectivity
 
 struct ListView: View {
     @StateObject var presenterDetector = PresenterDetector()

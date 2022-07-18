@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PresenterView: View {
-    @StateObject var presenter = Presenter()
+    @StateObject var presenter = SessionPresenter()
     @State var pressedEmoji: String? = nil
     
     @State var brToggleOn: Bool = false
