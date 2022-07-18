@@ -30,10 +30,10 @@ struct ListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear() {
             presenterDetector.sessionDisconnect()
-            presenterDetector.stopAdvertise()
+            presenterDetector.stopBrowsing()
         }
         .onAppear() {
-            presenterDetector.startAdvertise()
+            presenterDetector.startBrowsing()
             
         }
     }

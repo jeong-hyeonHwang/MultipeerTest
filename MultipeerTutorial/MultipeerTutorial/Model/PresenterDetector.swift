@@ -21,8 +21,6 @@ class PresenterDetector: NSObject, ObservableObject {
     private let serviceType = "example-emoji"
     // 나의 기기 이름
     private let myPeerId = MCPeerID(displayName: "\(UIDevice.current.name)AUD")
-    // 서비스 발신
-    private let serviceAdvertiser: MCNearbyServiceAdvertiser
     // 서비스 탐색
     private let serviceBrowser: MCNearbyServiceBrowser
     // 연결된 모든 디바이스 탐색을 위한 세션
@@ -37,13 +35,11 @@ class PresenterDetector: NSObject, ObservableObject {
     override init() {
         session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .none)
         serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: serviceType)
-        serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: serviceType)
         
         super.init()
         
         session.delegate = self
         serviceBrowser.delegate = self
-        serviceAdvertiser.delegate = self
     }
     
     deinit {
@@ -59,15 +55,6 @@ class PresenterDetector: NSObject, ObservableObject {
         return serviceBrowser
     }
     
-    func startAdvertise() {
-        // Peer Advertising Start
-        serviceAdvertiser.startAdvertisingPeer()
-    }
-    
-    func stopAdvertise() {
-        serviceAdvertiser.stopAdvertisingPeer()
-    }
-    
     func startBrowsing() {
         // Peer Browsing Start
         serviceBrowser.startBrowsingForPeers()
@@ -79,27 +66,6 @@ class PresenterDetector: NSObject, ObservableObject {
     
     func sessionDisconnect() {
         session.disconnect()
-    }
-}
-
-// Error Notice Delegate
-extension PresenterDetector: MCNearbyServiceAdvertiserDelegate {
-    // Advertise Not Begin
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
-        log.error("ServiceAdvertiser didNotStartAdvertisingPeer: \(String(describing: error))")
-    }
-    
-    // Receive Invitation == true
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        log.info("didReceiveInvitationFromPeer \(peerID)")
-        
-        // MARK: Accept Invitation
-        if(peerID.displayName.contains(presenterSuffix)) {
-            invitationHandler(true, session)
-            if(!connectedPeers.contains(peerID)) {
-                connectedPeers.append(peerID)
-            }
-        }
     }
 }
 
