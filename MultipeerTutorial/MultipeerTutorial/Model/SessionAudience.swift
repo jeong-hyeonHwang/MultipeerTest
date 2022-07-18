@@ -13,9 +13,8 @@ import SwiftUI
 //https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
 // 청중 클래스
 class SessionAudience: NSObject, ObservableObject {
-    // 전송하고자하는 정보?
-    
     var temp: MCPeerID?
+    // 전송하고자하는 정보?
     private let serviceType = "example-emoji"
     // 나의 기기 이름
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)

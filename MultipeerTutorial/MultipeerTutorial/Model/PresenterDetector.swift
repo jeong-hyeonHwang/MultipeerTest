@@ -94,7 +94,7 @@ extension PresenterDetector: MCNearbyServiceAdvertiserDelegate {
         log.info("didReceiveInvitationFromPeer \(peerID)")
         
         // MARK: Accept Invitation
-        if(peerID.displayName.contains("PRE")) {
+        if(peerID.displayName.contains(presenterSuffix)) {
             invitationHandler(true, session)
             if(!connectedPeers.contains(peerID)) {
                 connectedPeers.append(peerID)
@@ -113,7 +113,7 @@ extension PresenterDetector: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String: String]?) {
         log.info("ServiceBrowser found peer: \(peerID)")
         //MARK: Invite Peer who We Found
-        if(peerID.displayName.contains("PRE")) {
+        if(peerID.displayName.contains(presenterSuffix)) {
             browser.invitePeer(peerID, to: self.session, withContext: nil, timeout: 10)
         }
     }
