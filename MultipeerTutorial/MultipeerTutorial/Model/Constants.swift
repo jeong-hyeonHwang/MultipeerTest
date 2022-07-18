@@ -11,6 +11,10 @@ import SwiftUI
 let width = UIScreen.main.bounds.width
 let height = UIScreen.main.bounds.height
 
+
+let presenterSuffix = "PRE"
+let audienceSuffix = "AUD"
+
 enum NamedEmoji: String, CaseIterable {
     case Marvelous, Surprising, Congrats, LEGO, Idk, Good
 }

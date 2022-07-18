@@ -13,6 +13,9 @@
 		3A1122ED287EE4B700E12D19 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A1122EC287EE4B700E12D19 /* Preview Assets.xcassets */; };
 		3A1122EF287EE4B700E12D19 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1122EE287EE4B700E12D19 /* Persistence.swift */; };
 		3A1122F2287EE4B700E12D19 /* MultipeerTutorial.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3A1122F0287EE4B700E12D19 /* MultipeerTutorial.xcdatamodeld */; };
+		3AA210A22885A246002A6B93 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA210A12885A246002A6B93 /* Presenter.swift */; };
+		3AA210A42885A250002A6B93 /* PresenterDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA210A32885A250002A6B93 /* PresenterDetector.swift */; };
+		3AA210A62885AE7F002A6B93 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA210A52885AE7F002A6B93 /* String+.swift */; };
 		3AB219B0287EFF9E00945A02 /* SessionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB219AF287EFF9E00945A02 /* SessionObserver.swift */; };
 		3AF72D422880423900D1F773 /* PresenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF72D412880423900D1F773 /* PresenterView.swift */; };
 		3AF72D442880424400D1F773 /* AudienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF72D432880424400D1F773 /* AudienceView.swift */; };
@@ -31,6 +34,9 @@
 		3A1122EE287EE4B700E12D19 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		3A1122F1287EE4B700E12D19 /* MultipeerTutorial.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MultipeerTutorial.xcdatamodel; sourceTree = "<group>"; };
 		3A1122FA287EED5500E12D19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3AA210A12885A246002A6B93 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
+		3AA210A32885A250002A6B93 /* PresenterDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterDetector.swift; sourceTree = "<group>"; };
+		3AA210A52885AE7F002A6B93 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		3AB219AF287EFF9E00945A02 /* SessionObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionObserver.swift; sourceTree = "<group>"; };
 		3AF72D412880423900D1F773 /* PresenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterView.swift; sourceTree = "<group>"; };
 		3AF72D432880424400D1F773 /* AudienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudienceView.swift; sourceTree = "<group>"; };
@@ -70,6 +76,7 @@
 		3A1122E4287EE4B600E12D19 /* MultipeerTutorial */ = {
 			isa = PBXGroup;
 			children = (
+				3AA210A72885AE86002A6B93 /* Extensions */,
 				3A1122FA287EED5500E12D19 /* Info.plist */,
 				3A1122E5287EE4B600E12D19 /* MultipeerTutorialApp.swift */,
 				3AF72D4D28806D2200D1F773 /* Model */,
@@ -90,6 +97,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		3AA210A72885AE86002A6B93 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3AA210A52885AE7F002A6B93 /* String+.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		3AF72D4D28806D2200D1F773 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +112,8 @@
 				3AB219AF287EFF9E00945A02 /* SessionObserver.swift */,
 				3AF72D47288042B800D1F773 /* SessionPresenter.swift */,
 				3AF72D49288042BE00D1F773 /* SessionAudience.swift */,
+				3AA210A12885A246002A6B93 /* Presenter.swift */,
+				3AA210A32885A250002A6B93 /* PresenterDetector.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -188,10 +205,13 @@
 				3AF72D422880423900D1F773 /* PresenterView.swift in Sources */,
 				3AB219B0287EFF9E00945A02 /* SessionObserver.swift in Sources */,
 				3A1122F2287EE4B700E12D19 /* MultipeerTutorial.xcdatamodeld in Sources */,
+				3AA210A42885A250002A6B93 /* PresenterDetector.swift in Sources */,
+				3AA210A22885A246002A6B93 /* Presenter.swift in Sources */,
 				3A1122E8287EE4B600E12D19 /* ContentView.swift in Sources */,
 				3A1122E6287EE4B600E12D19 /* MultipeerTutorialApp.swift in Sources */,
 				3AF72D4C288050DF00D1F773 /* ListView.swift in Sources */,
 				3AF72D4A288042BE00D1F773 /* SessionAudience.swift in Sources */,
+				3AA210A62885AE7F002A6B93 /* String+.swift in Sources */,
 				3AF72D462880425800D1F773 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

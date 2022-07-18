@@ -10,15 +10,15 @@ import SwiftUI
 import MultipeerConnectivity
 
 struct ListView: View {
-    @StateObject var sessionObserver = SessionObserver()
+    @StateObject var presenterDetector = PresenterDetector()
     
     var body: some View {
         VStack{
             HStack{
-                List(sessionObserver.connectRequestedPeers, id: \.self) { peerID in
+                List(presenterDetector.connectedPeers, id: \.self) { peerID in
                     NavigationLink(destination: AudienceView(connectedPeerID: peerID)) {
                         HStack {
-                            Text(peerID.displayName)
+                            Text(peerID.displayName.substring(from: 0, to: peerID.displayName.count-4))
                             Spacer()
                         }
                     }
@@ -28,12 +28,12 @@ struct ListView: View {
         .navigationTitle("Device List")
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear() {
-            sessionObserver.sessionDisconnect()
-            sessionObserver.stopAdvertise()
-            sessionObserver.connectRequestedPeers.removeAll()
+            presenterDetector.sessionDisconnect()
+            presenterDetector.stopAdvertise()
         }
         .onAppear() {
-            sessionObserver.startAdvertise()
+            presenterDetector.startAdvertise()
+            
         }
     }
 }

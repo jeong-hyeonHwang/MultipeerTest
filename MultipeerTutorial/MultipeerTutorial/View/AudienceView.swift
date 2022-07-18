@@ -34,7 +34,7 @@ struct AudienceView: View {
                 }
             }.frame(width: width, height: height * 0.6, alignment: .center)
         }
-        .navigationTitle("\(connectedPeerID.displayName)")
+        .navigationTitle("\(connectedPeerID.displayName.substring(from: 0, to: connectedPeerID.displayName.count-4))")
         .navigationBarTitleDisplayMode(.inline)
         .padding()
         .onAppear() {
