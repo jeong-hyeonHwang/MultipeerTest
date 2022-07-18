@@ -44,7 +44,7 @@ struct PresenterView: View {
             Text("Connected Devices:")
             
             List(presenter.connectedPeers, id: \.self) { peer in
-                if(!peer.displayName.contains("AUD"))
+                if(!peer.displayName.contains("AUD") && !peer.displayName.contains("PRE"))
                 {
                     Text(peer.displayName)
                 }

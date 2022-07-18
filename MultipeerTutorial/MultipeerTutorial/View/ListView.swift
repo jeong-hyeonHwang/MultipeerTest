@@ -16,10 +16,12 @@ struct ListView: View {
         VStack{
             HStack{
                 List(presenterDetector.connectedPeers, id: \.self) { peerID in
-                    NavigationLink(destination: AudienceView(connectedPeerID: peerID)) {
-                        HStack {
-                            Text(peerID.displayName.substring(from: 0, to: peerID.displayName.count-4))
-                            Spacer()
+                    if (peerID.displayName.contains("PRE")) {
+                        NavigationLink(destination: AudienceView(connectedPeerID: peerID)) {
+                            HStack {
+                                Text(peerID.displayName.substring(from: 0, to: peerID.displayName.count-4))
+                                Spacer()
+                            }
                         }
                     }
                 }
