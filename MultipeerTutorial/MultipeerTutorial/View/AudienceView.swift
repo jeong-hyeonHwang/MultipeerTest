@@ -28,7 +28,7 @@ struct AudienceView: View {
             VStack(spacing: 25){
                 ForEach(NamedEmoji.allCases, id: \.self) { emoji in
                     Button(emoji.rawValue) {
-                        audience.send(emoji: emoji)
+                        audience.send(emoji: emoji, receiver: connectedPeerID)
                         pressedEmoji = "\(emoji)"
                     }
                 }
