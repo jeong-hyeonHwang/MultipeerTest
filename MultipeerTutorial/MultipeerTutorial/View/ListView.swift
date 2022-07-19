@@ -16,6 +16,8 @@ struct ListView: View {
         VStack{
             HStack{
                 List(presenterDetector.connectedPeers, id: \.self) { peerID in
+                    // MARK: 리스트 갱신
+                    // 리스트에는 PresenterDetector에 해당하는 Peer만 출력
                     if (peerID.displayName.contains(presenterSuffix)) {
                         NavigationLink(destination: AudienceView(currentPresenter: peerID)) {
                             HStack {

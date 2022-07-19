@@ -26,7 +26,7 @@ class PresenterDetector: NSObject, ObservableObject {
     // 전송하고자하는 정보의 타입
     private let serviceType = "example-emoji"
     // 나의 기기 이름
-    private let myPeerId = MCPeerID(displayName: "\(UIDevice.current.name + audienceSuffix)")
+    private let myPeerId = MCPeerID(displayName: "\(UIDevice.current.name + detectorSuffix)")
     // 서비스 탐색
     private let serviceBrowser: MCNearbyServiceBrowser
     // 연결된 모든 디바이스 탐색을 위한 세션

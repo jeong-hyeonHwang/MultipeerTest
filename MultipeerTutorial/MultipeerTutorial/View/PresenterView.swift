@@ -52,7 +52,7 @@ struct PresenterView: View {
             Text("Connected Devices:")
             
             List(presenter.connectedPeers, id: \.self) { peer in
-                if(!peer.displayName.contains(audienceSuffix) && !peer.displayName.contains(presenterSuffix))
+                if(!peer.displayName.contains(detectorSuffix) && !peer.displayName.contains(presenterSuffix))
                 {
                     Text(peer.displayName)
                 }

@@ -15,10 +15,10 @@ let height = UIScreen.main.bounds.height
 // MARK: Presenter Device 식별 접미사
 let presenterSuffix = "PRE"
 // MARK: Detector Device 식별 접미사
-let audienceSuffix = "AUD"
+let detectorSuffix = "DEC"
 
 // MARK: 발신 및 수신할 이모지의 케이스
-enum NamedEmoji: String, CaseIterable {
+enum EmojiName: String, CaseIterable {
     case Marvelous, Surprising, Congrats, LEGO, Idk, Good
 }
 

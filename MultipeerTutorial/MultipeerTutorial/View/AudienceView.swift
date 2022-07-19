@@ -31,7 +31,7 @@ struct AudienceView: View {
             }
             .frame(width: width, height: height * 0.4, alignment: .center)
             VStack(spacing: 25){
-                ForEach(NamedEmoji.allCases, id: \.self) { emoji in
+                ForEach(EmojiName.allCases, id: \.self) { emoji in
                     Button(emoji.rawValue) {
                         audience.send(emoji: emoji, receiver: currentPresenter)
                         pressedEmoji = "\(emoji)"

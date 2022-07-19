@@ -44,7 +44,7 @@ class SessionAudience: NSObject, ObservableObject {
     /* 이모지 전송
      - 연결된 peer가 존재한다면, 특정 peer 선택 후 이모지를 전송합니다
      */
-    func send(emoji: NamedEmoji, receiver: MCPeerID) {
+    func send(emoji: EmojiName, receiver: MCPeerID) {
         log.info("sendEmoji: \(String(describing: emoji)) to \(self.session.connectedPeers.count) peers")
 
         // Is there any Connected Peers more than 1
