@@ -12,13 +12,17 @@ let width = UIScreen.main.bounds.width
 let height = UIScreen.main.bounds.height
 
 
+// MARK: Presenter Device 식별 접미사
 let presenterSuffix = "PRE"
+// MARK: Detector Device 식별 접미사
 let audienceSuffix = "AUD"
 
+// MARK: 발신 및 수신할 이모지의 케이스
 enum NamedEmoji: String, CaseIterable {
     case Marvelous, Surprising, Congrats, LEGO, Idk, Good
 }
 
+// MARK: Enum -> String 변환
 func emojiIs(s: String) -> String {
     switch s {
     case "Marvelous":

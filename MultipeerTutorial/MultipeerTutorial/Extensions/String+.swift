@@ -7,7 +7,8 @@
 
 import Foundation
 
-//https://ios-development.tistory.com/379
+// https://ios-development.tistory.com/379
+// Presenter, Detector의 MCPeerID Suffix 제거를 위함
 extension String {
     func substring(from: Int, to: Int) -> String {
         guard from < count, to >= 0, to - from >= 0 else {

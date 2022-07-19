@@ -9,12 +9,23 @@ import MultipeerConnectivity
 import os
 import SwiftUI
 
-//https://developer.apple.com/documentation/multipeerconnectivity
-//https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
-// 청중 클래스
+// https://developer.apple.com/documentation/multipeerconnectivity
+// https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
+
+// MARK: 청중 클래스 Info **IMPORTANT**
+/* 청중 클래스
+ - 청중 View(이하, AView)에서 초기화가 이루어져야합니다
+ - Advertising: Presenter와의 세션 연결을 위함. AView에 들어간 직후 Start, 뷰 전환이 이루어질 때 Stop
+ - 뷰 전환 시(onDisappear), sessionDisconnect도 함께 호출해야합니다
+ - 자세한 예시는 AudienceView 참고
+ */
+
 class SessionAudience: NSObject, ObservableObject {
-    var temp: MCPeerID?
-    // 전송하고자하는 정보?
+    
+    // 청중이 연결하고자하는 발표자
+    var currentPresenter: MCPeerID?
+    
+    // 전송하고자하는 정보의 타입
     private let serviceType = "example-emoji"
     // 나의 기기 이름
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
@@ -26,10 +37,13 @@ class SessionAudience: NSObject, ObservableObject {
     // 로그 출력
     private let log = Logger()
     
-    // Save Connected Peers
+    // 현재 연결된 Peer의 리스트
     @Published var connectedPeers: [MCPeerID] = []
     
-    // Emoji Send
+    // MARK: 이모지 전송
+    /* 이모지 전송
+     - 연결된 peer가 존재한다면, 특정 peer 선택 후 이모지를 전송합니다
+     */
     func send(emoji: NamedEmoji, receiver: MCPeerID) {
         log.info("sendEmoji: \(String(describing: emoji)) to \(self.session.connectedPeers.count) peers")
 
@@ -84,8 +98,8 @@ extension SessionAudience: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         log.info("didReceiveInvitationFromPeer \(peerID)")
         
-        // MARK: Accept Invitation
-        if(peerID.displayName == temp?.displayName)
+        // MARK: Accept Invitation **IMPORTANT**
+        if(peerID.displayName == currentPresenter?.displayName)
         {
             invitationHandler(true, session)
         }

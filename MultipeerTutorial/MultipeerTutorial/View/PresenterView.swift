@@ -9,8 +9,12 @@ import Foundation
 import SwiftUI
 
 struct PresenterView: View {
+    
+    // MARK: Presenter Initialize
     @StateObject var presenter = SessionPresenter()
-    @State var pressedEmoji: String? = nil
+    
+    // MARK: Audience로부터 받은 이모지
+    @State var receivedEmoji: String? = nil
     
     @State var brToggleOn: Bool = false
     
@@ -21,10 +25,13 @@ struct PresenterView: View {
                     .padding(20)
                     .onChange(of: brToggleOn) { status in
                         if(status == true) {
+                            // Presenter Brosing, Advertising Start
                             print("BROWSING START!")
                             presenter.startBrowsing()
                             presenter.startAdvertise()
                         } else {
+                            // Presenter Brosing, Advertising Stop
+                            // Session Disconnect
                             print("BROWSING STOP!")
                             presenter.stopAdvertise()
                             presenter.stopBrowsing()
@@ -33,7 +40,8 @@ struct PresenterView: View {
                     }
                 Text("RECEIVED Emoji")
                     .padding(10)
-                Text("\(emojiIs(s: presenter.currentEmoji?.rawValue ?? "NIL"))")
+                // MARK: 수신한 이모지 출력
+                Text("\(emojiIs(s: presenter.receivedEmoji?.rawValue ?? "NIL"))")
                     .font(.system(size: 60))
                     .padding(10)
             }

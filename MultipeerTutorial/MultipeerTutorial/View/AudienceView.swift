@@ -10,10 +10,15 @@ import SwiftUI
 import MultipeerConnectivity
 
 struct AudienceView: View {
-    @State var connectedPeerID: MCPeerID
+    
+    // MARK: 현재 연결된 발표자
+    @State var currentPresenter: MCPeerID
+    // MARK: Audience Initialize
     @StateObject var audience = SessionAudience()
     
+    // MARK: 가장 최근에 눌린 이모지
     @State var pressedEmoji: String? = nil
+    
     @State var brToggleOn: Bool = false
     
     var body: some View {
@@ -28,17 +33,17 @@ struct AudienceView: View {
             VStack(spacing: 25){
                 ForEach(NamedEmoji.allCases, id: \.self) { emoji in
                     Button(emoji.rawValue) {
-                        audience.send(emoji: emoji, receiver: connectedPeerID)
+                        audience.send(emoji: emoji, receiver: currentPresenter)
                         pressedEmoji = "\(emoji)"
                     }
                 }
             }.frame(width: width, height: height * 0.6, alignment: .center)
         }
-        .navigationTitle("\(connectedPeerID.displayName.substring(from: 0, to: connectedPeerID.displayName.count-4))")
+        .navigationTitle("\(currentPresenter.displayName.substring(from: 0, to: currentPresenter.displayName.count-4))")
         .navigationBarTitleDisplayMode(.inline)
         .padding()
         .onAppear() {
-            audience.temp = connectedPeerID
+            audience.currentPresenter = currentPresenter
             audience.startAdvertise()
         }
         .onDisappear() {

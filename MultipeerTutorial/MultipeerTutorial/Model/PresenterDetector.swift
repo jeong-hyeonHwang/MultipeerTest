@@ -11,16 +11,22 @@ import MultipeerConnectivity
 import os
 import SwiftUI
 
-//https://developer.apple.com/documentation/multipeerconnectivity
-//https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
-// 발표자 탐지
+// https://developer.apple.com/documentation/multipeerconnectivity
+// https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
+
+// MARK: 발표자 탐지 클래스 Info
+/* 발표자 탐지 클래스
+- 청중의 List View (이하, LView)에서 초기화가 이루어져야합니다
+- Browsing: Presenter 탐지를 위함. LView에 들어간 직후 Start, 뷰 전환이 이루어질 때 Stop
+- 뷰 전환 시(onDisappear), sessionDisconnect도 함께 호출해야합니다
+- 자세한 예시는 ListView 참고
+ */
+
 class PresenterDetector: NSObject, ObservableObject {
-    
-    var temp: MCPeerID?
-    // 전송하고자하는 정보?
+    // 전송하고자하는 정보의 타입
     private let serviceType = "example-emoji"
     // 나의 기기 이름
-    private let myPeerId = MCPeerID(displayName: "\(UIDevice.current.name)AUD")
+    private let myPeerId = MCPeerID(displayName: "\(UIDevice.current.name + audienceSuffix)")
     // 서비스 탐색
     private let serviceBrowser: MCNearbyServiceBrowser
     // 연결된 모든 디바이스 탐색을 위한 세션

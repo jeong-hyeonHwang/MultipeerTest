@@ -11,14 +11,23 @@ import MultipeerConnectivity
 import os
 import SwiftUI
 
-//https://developer.apple.com/documentation/multipeerconnectivity
-//https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
-// 발표자 클래스
+// https://developer.apple.com/documentation/multipeerconnectivity
+// https://www.ralfebert.com/ios-app-development/multipeer-connectivity/
+
+// MARK: 발표자 클래스 Info
+/* 발표자 클래스
+ - 발표자 View(이하, PView)에서 초기화가 이루어져야합니다
+ - Advertising: List View에서의 데이터 갱신을 위함(PresenterDetector Browser에게 알리기 위함). PView에 들어간 직후 Start, 뷰 전환이 이루어질 때 Stop
+ - Browsing: Audience 확인을 위함. PView에 들어간 직후 Start, 뷰 전환이 이루어질 때 Stop
+ - 뷰 전환 시(onDisappear), sessionDisconnect도 함께 호출해야합니다
+ - 자세한 예시는 PresenterView 참고
+ */
+
 class SessionPresenter: NSObject, ObservableObject {
-    // 전송하고자하는 정보?
+    // 전송하고자하는 정보의 타입
     private let serviceType = "example-emoji"
     // 나의 기기 이름
-    private let myPeerId = MCPeerID(displayName: "\(UIDevice.current.name)PRE")
+    private let myPeerId = MCPeerID(displayName: "\(UIDevice.current.name + presenterSuffix)")
     // 서비스 발신
     private let serviceAdvertiser: MCNearbyServiceAdvertiser
     // 서비스 탐색
@@ -29,11 +38,10 @@ class SessionPresenter: NSObject, ObservableObject {
     // 로그 출력
     private let log = Logger()
     
-    // Save Connected Peers
+    // 현재 연결된 Peer의 리스트
     @Published var connectedPeers: [MCPeerID] = []
-    
-    // Save Emoji Setting
-    @Published var currentEmoji: NamedEmoji? = nil
+    // MARK: 현재 수신한 이모지
+    @Published var receivedEmoji: NamedEmoji? = nil
     
     override init() {
         session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .none)
@@ -50,14 +58,6 @@ class SessionPresenter: NSObject, ObservableObject {
     deinit {
         // Peer Browsing Stop
         serviceBrowser.stopBrowsingForPeers()
-    }
-    
-    func sessionIs() -> MCSession {
-        return session
-    }
-    
-    func browserIs() -> MCNearbyServiceBrowser {
-        return serviceBrowser
     }
     
     func startAdvertise() {
@@ -135,12 +135,15 @@ extension SessionPresenter: MCSessionDelegate {
         }
     }
     
-    // Inform Peer's transfer Data bytes
+    // MARK: 이모지 수신
+    /* 이모지 수신
+     - peer로부터 이모지를 수신한 경우, currentEmoji의 정보를 갱신합니다
+     */
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         if let string = String(data: data, encoding: .utf8), let emoji = NamedEmoji(rawValue: string) {
             log.info("didReceive Emoji \(string)")
             DispatchQueue.main.async {
-                self.currentEmoji = emoji
+                self.receivedEmoji = emoji
             }
         } else {
             log.info("didReceive invalid value \(data.count) bytes")

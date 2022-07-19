@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ListView: View {
+    // MARK: PresenterDetector Initialize
     @StateObject var presenterDetector = PresenterDetector()
     
     var body: some View {
@@ -16,7 +17,7 @@ struct ListView: View {
             HStack{
                 List(presenterDetector.connectedPeers, id: \.self) { peerID in
                     if (peerID.displayName.contains(presenterSuffix)) {
-                        NavigationLink(destination: AudienceView(connectedPeerID: peerID)) {
+                        NavigationLink(destination: AudienceView(currentPresenter: peerID)) {
                             HStack {
                                 Text(peerID.displayName.substring(from: 0, to: peerID.displayName.count-4))
                                 Spacer()
